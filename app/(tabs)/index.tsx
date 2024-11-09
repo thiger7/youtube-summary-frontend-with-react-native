@@ -1,16 +1,8 @@
 import TaskInput from "@/components/task/TaskInput";
 import TaskItem from "@/components/task/TaskItem";
 import { useState } from "react";
-import {
-  Text,
-  TextInput,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  FlatList,
-  ListRenderItem,
-} from "react-native";
-import { Icon } from "react-native-elements";
+import { Text, StyleSheet, View, FlatList } from "react-native";
+import { Link } from "expo-router";
 
 interface Task {
   id: string;
@@ -49,6 +41,20 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
+      <Link href="/youtube-summary">
+        <Text
+          style={{
+            padding: 20,
+            backgroundColor: "green",
+            color: "white",
+            borderRadius: 6,
+            marginBottom: 20,
+            textAlign: "center",
+          }}
+        >
+          Youtube Summary
+        </Text>
+      </Link>
       <Text style={styles.title}>TODOアプリ</Text>
       <TaskInput
         taskText={taskText}
