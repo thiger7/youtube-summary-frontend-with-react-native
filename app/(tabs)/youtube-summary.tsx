@@ -88,15 +88,15 @@ const YoutubeSummaryApp = () => {
           YouTube Summary App
         </Text>
       </View>
+      <TextInput
+        placeholder="Enter YouTube URL"
+        value={youtubeUrl}
+        onChangeText={setYoutubeUrl}
+        style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+      />
+      <Button title="Submit" onPress={submitUrl} />
+      {loading && <ActivityIndicator size="large" color="#0000ff" />}
       <ScrollView contentContainerStyle={{ padding: 20 }}>
-        <TextInput
-          placeholder="Enter YouTube URL"
-          value={youtubeUrl}
-          onChangeText={setYoutubeUrl}
-          style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
-        />
-        <Button title="Submit" onPress={submitUrl} />
-        {loading && <ActivityIndicator size="large" color="#0000ff" />}
         {summary && (
           <View style={{ marginTop: 20 }}>
             <Text style={{ fontWeight: "bold" }}>Summary:</Text>
