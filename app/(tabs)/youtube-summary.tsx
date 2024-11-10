@@ -84,6 +84,7 @@ const YoutubeSummaryApp = () => {
 
   return (
     <>
+      <ScrollView contentContainerStyle={{ padding: 20 }}>
       <View>
         <Text
           style={{
@@ -115,14 +116,13 @@ const YoutubeSummaryApp = () => {
         >
           Youtube動画の要約を始める
         </Text>
-        <View>
-          <Text style={{ fontSize: 24, padding: 20, marginTop: 10 }}>
-            Summary
-          </Text>
-        </View>
       </TouchableOpacity>
       {loading && <ActivityIndicator size="large" color="#0000ff" />}
-      <ScrollView contentContainerStyle={{ padding: 20 }}>
+      <View>
+        <Text style={{ fontSize: 24, padding: 20, marginTop: 10 }}>
+          Summary
+        </Text>
+      </View>
         {summary && (
           <View style={styles.summaryContainer}>
             <Text style={styles.summaryTitle}>Summary:</Text>
