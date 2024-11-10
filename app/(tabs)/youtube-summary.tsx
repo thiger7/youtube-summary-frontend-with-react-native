@@ -3,10 +3,11 @@ import React, { useState } from "react";
 import {
   View,
   TextInput,
-  Button,
   Text,
   ActivityIndicator,
   ScrollView,
+  TouchableOpacity,
+  StyleSheet,
 } from "react-native";
 
 const YoutubeSummaryApp = () => {
@@ -84,28 +85,79 @@ const YoutubeSummaryApp = () => {
   return (
     <>
       <View>
-        <Text style={{ fontSize: 24, fontWeight: "bold", padding: 20, marginTop: 200 }}>
+        <Text
+          style={{
+            fontSize: 24,
+            fontWeight: "bold",
+            padding: 20,
+            marginTop: 50,
+          }}
+        >
           YouTube Summary App
         </Text>
       </View>
       <TextInput
-        placeholder="Enter YouTube URL"
+        placeholder="YouTube URL を入力してください"
         value={youtubeUrl}
         onChangeText={setYoutubeUrl}
-        style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+        style={{ borderWidth: 1, padding: 10, marginBottom: 10, margin: 20 }}
       />
-      <Button title="Submit" onPress={submitUrl} />
+      <TouchableOpacity onPress={submitUrl}>
+        <Text
+          style={{
+            padding: 10,
+            backgroundColor: "green",
+            color: "white",
+            borderRadius: 6,
+            margin: 20,
+            textAlign: "center",
+          }}
+        >
+          Youtube動画の要約を始める
+        </Text>
+        <View>
+          <Text style={{ fontSize: 24, padding: 20, marginTop: 10 }}>
+            Summary
+          </Text>
+        </View>
+      </TouchableOpacity>
       {loading && <ActivityIndicator size="large" color="#0000ff" />}
       <ScrollView contentContainerStyle={{ padding: 20 }}>
         {summary && (
-          <View style={{ marginTop: 20 }}>
-            <Text style={{ fontWeight: "bold" }}>Summary:</Text>
-            <Text>{summary}</Text>
+          <View style={styles.summaryContainer}>
+            <Text style={styles.summaryTitle}>Summary:</Text>
+            <Text style={styles.summaryText}>{summary}</Text>
           </View>
         )}
       </ScrollView>
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  summaryContainer: {
+    marginTop: 20,
+    padding: 15,
+    borderWidth: 1,
+    borderColor: "#4CAF50", // 好みの枠線カラー
+    borderRadius: 10, // 角丸
+    backgroundColor: "#F9F9F9", // 背景色を薄い色に
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5, // Android用の影
+  },
+  summaryTitle: {
+    fontWeight: "bold",
+    fontSize: 16,
+    color: "#4CAF50",
+    marginBottom: 8,
+  },
+  summaryText: {
+    fontSize: 14,
+    color: "#333",
+  },
+});
 
 export default YoutubeSummaryApp;
