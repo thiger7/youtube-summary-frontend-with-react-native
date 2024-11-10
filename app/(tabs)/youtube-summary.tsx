@@ -32,7 +32,7 @@ const YoutubeSummaryApp = () => {
         },
       );
 
-      // ポーリングを開始
+      setYoutubeUrl("");
       startPolling();
     } catch (error) {
       console.error("Error submitting URL:", error);
@@ -102,6 +102,8 @@ const YoutubeSummaryApp = () => {
         value={youtubeUrl}
         onChangeText={setYoutubeUrl}
         style={{ borderWidth: 1, padding: 10, marginBottom: 10, margin: 20 }}
+        onSubmitEditing={submitUrl}
+        returnKeyType="send"
       />
       <TouchableOpacity onPress={submitUrl}>
         <Text
