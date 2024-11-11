@@ -1,4 +1,5 @@
 // app/youtube-summary.tsx
+import { VIDEOS_ENDPOINT } from "@/src/constants/urls";
 import React, { useState } from "react";
 import {
   View,
@@ -9,6 +10,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { Icon } from "react-native-elements";
 
 const YoutubeSummaryApp = () => {
   const [youtubeUrl, setYoutubeUrl] = useState("");
@@ -20,17 +22,14 @@ const YoutubeSummaryApp = () => {
       setLoading(true);
       setSummary(null);
 
-      await fetch(
-        "https://3598-2405-6582-1fe0-1f00-fc17-93a0-e36-f375.ngrok-free.app/videos",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "ngrok-skip-browser-warning": "true",
-          },
-          body: JSON.stringify({ youtube_url: youtubeUrl }),
+      await fetch(VIDEOS_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "ngrok-skip-browser-warning": "true",
         },
-      );
+        body: JSON.stringify({ youtube_url: youtubeUrl }),
+      });
 
       setYoutubeUrl("");
       startPolling();
@@ -40,13 +39,15 @@ const YoutubeSummaryApp = () => {
     }
   };
 
+  const clearUrl = () => {
+    setYoutubeUrl("");
+  }
+
   const startPolling = () => {
     const intervalId = setInterval(async () => {
       try {
         const response = await fetch(
-          `https://3598-2405-6582-1fe0-1f00-fc17-93a0-e36-f375.ngrok-free.app/videos?youtube_url=${encodeURIComponent(
-            youtubeUrl,
-          )}`,
+          `${VIDEOS_ENDPOINT}?youtube_url=${encodeURIComponent(youtubeUrl)}`,
           {
             method: "GET",
             headers: {
@@ -85,46 +86,61 @@ const YoutubeSummaryApp = () => {
   return (
     <>
       <ScrollView contentContainerStyle={{ padding: 20 }}>
-      <View>
-        <Text
-          style={{
-            fontSize: 24,
-            fontWeight: "bold",
-            padding: 20,
-            marginTop: 50,
-          }}
-        >
-          YouTube Summary App
-        </Text>
-      </View>
-      <TextInput
-        placeholder="YouTube URL を入力してください"
-        value={youtubeUrl}
-        onChangeText={setYoutubeUrl}
-        style={{ borderWidth: 1, padding: 10, marginBottom: 10, margin: 20 }}
-        onSubmitEditing={submitUrl}
-        returnKeyType="send"
-      />
-      <TouchableOpacity onPress={submitUrl}>
-        <Text
-          style={{
-            padding: 10,
-            backgroundColor: "green",
-            color: "white",
-            borderRadius: 6,
-            margin: 20,
-            textAlign: "center",
-          }}
-        >
-          Youtube動画の要約を始める
-        </Text>
-      </TouchableOpacity>
-      {loading && <ActivityIndicator size="large" color="#0000ff" />}
-      <View>
-        <Text style={{ fontSize: 24, padding: 20, marginTop: 10 }}>
-          Summary
-        </Text>
-      </View>
+        <View>
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: "bold",
+              padding: 20,
+              marginTop: 50,
+            }}
+          >
+            YouTube Summary App
+          </Text>
+        </View>
+        <TextInput
+          placeholder="YouTube URL を入力してください"
+          value={youtubeUrl}
+          onChangeText={setYoutubeUrl}
+          style={{ borderWidth: 1, padding: 10, marginBottom: 10, margin: 20 }}
+          onSubmitEditing={submitUrl}
+          returnKeyType="send"
+        />
+        <TouchableOpacity onPress={clearUrl}>
+          <Text
+            style={{
+              padding: 10,
+              backgroundColor: "#ccc",
+              color: "black",
+              borderRadius: 6,
+              margin: 20,
+              marginBottom: 10,
+              textAlign: "center",
+            }}
+          >
+            クリア
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={submitUrl}>
+          <Text
+            style={{
+              padding: 10,
+              backgroundColor: "green",
+              color: "white",
+              borderRadius: 6,
+              margin: 20,
+              textAlign: "center",
+            }}
+          >
+            Youtube動画の要約を始める
+          </Text>
+        </TouchableOpacity>
+        {loading && <ActivityIndicator size="large" color="#0000ff" />}
+        <View>
+          <Text style={{ fontSize: 24, padding: 20, marginTop: 10 }}>
+            Summary
+          </Text>
+        </View>
         {summary && (
           <View style={styles.summaryContainer}>
             <Text style={styles.summaryTitle}>Summary:</Text>
