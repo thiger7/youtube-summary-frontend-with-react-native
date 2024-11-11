@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { Icon } from "react-native-elements";
+import * as Clipboard from "expo-clipboard";
 
 const YoutubeSummaryApp = () => {
   const [youtubeUrl, setYoutubeUrl] = useState("");
@@ -41,7 +41,14 @@ const YoutubeSummaryApp = () => {
 
   const clearUrl = () => {
     setYoutubeUrl("");
-  }
+  };
+
+  const copyToClipboard = async () => {
+    if (summary) {
+      await Clipboard.setStringAsync(summary);
+      alert("要約がクリップボードにコピーされました！");
+    }
+  };
 
   const startPolling = () => {
     const intervalId = setInterval(async () => {
@@ -142,10 +149,12 @@ const YoutubeSummaryApp = () => {
           </Text>
         </View>
         {summary && (
-          <View style={styles.summaryContainer}>
-            <Text style={styles.summaryTitle}>Summary:</Text>
-            <Text style={styles.summaryText}>{summary}</Text>
-          </View>
+          <TouchableOpacity onLongPress={copyToClipboard}>
+            <View style={styles.summaryContainer}>
+              <Text style={styles.summaryTitle}>Summary:</Text>
+              <Text style={styles.summaryText}>{summary}</Text>
+            </View>
+          </TouchableOpacity>
         )}
       </ScrollView>
     </>
