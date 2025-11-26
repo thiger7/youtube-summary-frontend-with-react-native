@@ -1,50 +1,84 @@
-# Welcome to your Expo app 👋
+# YouTube Summary App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+YouTube動画のURLを入力するだけで、AIが動画の内容を要約してくれるモバイルアプリです。
 
-## Get started
+## コンセプト
 
-1. Install dependencies
+**忙しいビジネスパーソンのために、YouTube長尺動画を手軽に要約**
 
-   ```bash
-   npm install
-   ```
+![アーキテクチャ図](docs/00_youtube-summary-flow.png)
 
-2. Start the app
+## 機能
 
-   ```bash
-    npx expo start
-   ```
+- YouTube URLを入力して動画の要約を取得
+- 要約結果をクリップボードにコピー
+- シンプルで直感的なUI
 
-In the output, you'll find options to open the app in a
+## スクリーンショット
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+| ホーム画面 | 要約結果（短） | 要約結果（長） |
+|:---:|:---:|:---:|
+| ![ホーム](docs/01_home.png) | ![要約1](docs/02_2_summary.png) | ![要約2](docs/02_1_summary.png) |
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 技術スタック
 
-## Get a fresh project
+### フロントエンド（このリポジトリ）
+- **React Native** - クロスプラットフォームモバイルアプリ開発
+- **Expo** (v51) - React Native開発プラットフォーム
+- **TypeScript** - 型安全な開発
+- **Expo Router** - ファイルベースルーティング
 
-When you're ready, run:
+### バックエンド（別リポジトリ）
+- **Ruby on Rails** - APIサーバー
+- **Solid Queue** - 非同期ジョブ処理
+- **YouTube Transcript API** - 動画の文字起こし取得
+- **Gemini API 1.5** - AI要約処理
 
-```bash
-npm run reset-project
+## アーキテクチャ
+
+```
+[React Native App] → POST /videos → [Rails API]
+                                         ↓
+                                   [Solid Queue]
+                                         ↓
+                               [YouTube Transcript API]
+                                         ↓
+                                  [Gemini API 1.5]
+                                         ↓
+[React Native App] ← Polling ← [Rails API + DB]
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+1. **YouTube URL送信**: ユーザーがURLを入力し、RailsサーバーにPOSTリクエスト
+2. **非同期処理**: Solid Queueでジョブをキューイング
+3. **文字起こし取得**: YouTube Transcript APIで動画のテキストを取得
+4. **AI要約**: Gemini API 1.5で要約を生成しDBに保存
+5. **結果取得**: フロントエンドがポーリングで要約結果を取得
 
-## Learn more
+## セットアップ
 
-To learn more about developing your project with Expo, look at the following resources:
+詳細な開発環境のセットアップ手順は [docs/development.md](docs/development.md) を参照してください。
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### クイックスタート
 
-## Join the community
+```bash
+# 依存関係のインストール
+npm install
 
-Join our community of developers creating universal apps.
+# 開発サーバーの起動
+npx expo start
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## 今後の改善予定
+
+- [ ] エラーハンドリングの強化
+- [ ] 要約履歴の保存機能
+- [ ] ダークモード対応
+- [ ] オフライン対応
+
+## 関連リポジトリ
+
+- バックエンドAPI: （別途リンクを追加）
+
+## ライセンス
+
+MIT License
