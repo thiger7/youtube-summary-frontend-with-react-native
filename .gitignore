@@ -1,5 +1,15 @@
+# dependencies
 node_modules/
+
+# expo
 .expo/
+
+# environment variables
+.env
+.env.*
+.env.local
+.env.development
+.env.production
 dist/
 npm-debug.*
 *.jks
